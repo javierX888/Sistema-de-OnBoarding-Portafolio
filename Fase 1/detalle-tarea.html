@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle de Tarea - OnBoardHub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: #f8fafc;
+            color: #1e293b;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        /* Navbar Empleado */
+        .navbar {
+            background: white;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            background: #4f46e5;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .breadcrumb {
+            font-size: 0.875rem;
+            color: #64748b;
+            margin-bottom: 1.5rem;
+        }
+
+        .breadcrumb span {
+            color: #4f46e5;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .task-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
+        }
+
+        /* Header Tarea */
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid #f1f5f9;
+            padding-bottom: 1.5rem;
+        }
+
+        .task-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 0.5rem;
+        }
+
+        .task-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.875rem;
+            color: #64748b;
+        }
+
+        .status-badge {
+            background: #fef3c7;
+            color: #b45309;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-weight: 600;
+            font-size: 0.75rem;
+        }
+
+        /* Contenido Tarea */
+        .task-description {
+            font-size: 0.9375rem;
+            line-height: 1.6;
+            color: #334155;
+            margin-bottom: 2rem;
+        }
+
+        /* Área de Carga de Documentos (Upload) */
+        .upload-area {
+            border: 2px dashed #cbd5e1;
+            border-radius: 0.75rem;
+            padding: 3rem 2rem;
+            text-align: center;
+            background: #f8fafc;
+            margin-bottom: 2rem;
+            transition: border-color 0.2s;
+        }
+
+        .upload-area:hover {
+            border-color: #4f46e5;
+        }
+
+        .upload-icon {
+            font-size: 2rem;
+            color: #94a3b8;
+            margin-bottom: 1rem;
+        }
+
+        .upload-text {
+            font-size: 0.9375rem;
+            font-weight: 500;
+            color: #334155;
+            margin-bottom: 0.5rem;
+        }
+
+        .upload-subtext {
+            font-size: 0.75rem;
+            color: #64748b;
+        }
+
+        .btn-outline {
+            margin-top: 1rem;
+            background: white;
+            border: 1px solid #cbd5e1;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #475569;
+            cursor: pointer;
+        }
+
+        /* Acciones Footer */
+        .task-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            border-top: 1px solid #f1f5f9;
+            padding-top: 1.5rem;
+        }
+
+        .btn-secondary {
+            background: white;
+            border: 1px solid #e2e8f0;
+            color: #475569;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: #4f46e5;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-primary.disabled {
+            background: #cbd5e1;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="logo">OnBoardHub</div>
+        <div class="user-profile">
+            <div class="avatar">MG</div>
+            María García
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="breadcrumb">
+            <span>Mi Viaje</span> / Firma de Contratos / Subir Cédula de Identidad
+        </div>
+
+        <div class="task-card">
+            <div class="task-header">
+                <div>
+                    <h1 class="task-title">Subir copia de Cédula de Identidad</h1>
+                    <div class="task-meta">
+                        <span>Vence: 16 Noviembre 2026</span>
+                        <span>•</span>
+                        <span>Responsable: RRHH</span>
+                    </div>
+                </div>
+                <div class="status-badge">Pendiente</div>
+            </div>
+
+            <div class="task-description">
+                <p>Para continuar con la firma de tu contrato, necesitamos verificar tu identidad. Por favor, sube una
+                    foto o escaneo claro de tu Cédula de Identidad por ambos lados.</p>
+                <br>
+                <p><strong>Requisitos del documento:</strong></p>
+                <ul style="margin-left: 1.5rem; margin-top: 0.5rem; color: #475569;">
+                    <li>El documento debe ser legible y a color.</li>
+                    <li>Debe incluir la parte frontal y posterior.</li>
+                    <li>Formatos aceptados: PDF, JPG o PNG (Max. 5MB).</li>
+                </ul>
+            </div>
+
+            <div class="upload-area">
+                <div class="upload-icon">📄</div>
+                <div class="upload-text">Arrastra y suelta tu archivo aquí</div>
+                <div class="upload-subtext">o haz clic para explorar tus carpetas</div>
+                <button class="btn-outline">Seleccionar Archivo</button>
+            </div>
+
+            <div class="task-actions">
+                <button class="btn-secondary">Volver al Viaje</button>
+                <button class="btn-primary disabled">Marcar como Completada</button>
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>
