@@ -1,0 +1,3054 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OnboardHub - Wireframes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #f1f5f9;
+      color: #1e293b;
+      line-height: 1.5;
+    }
+
+    /* View Switcher */
+    .view-switcher {
+      background: #0f172a;
+      color: white;
+      padding: 0.5rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .view-switcher span {
+      font-size: 0.875rem;
+      color: #94a3b8;
+    }
+
+    .switcher-buttons {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .switcher-btn {
+      padding: 0.375rem 1rem;
+      border-radius: 0.5rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .switcher-btn.active {
+      background: #4f46e5;
+      color: white;
+    }
+
+    .switcher-btn:not(.active) {
+      background: #1e293b;
+      color: #cbd5e1;
+    }
+
+    .switcher-btn:not(.active):hover {
+      background: #334155;
+    }
+
+    /* Layout */
+    .app-container {
+      display: flex;
+      height: calc(100vh - 44px);
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 256px;
+      background: #0f172a;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      transition: width 0.3s;
+    }
+
+    .sidebar.collapsed {
+      width: 64px;
+    }
+
+    .sidebar-header {
+      padding: 1rem;
+      border-bottom: 1px solid #334155;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .sidebar-logo {
+      font-weight: 700;
+      font-size: 1.125rem;
+      letter-spacing: -0.025em;
+    }
+
+    .sidebar.collapsed .sidebar-logo {
+      display: none;
+    }
+
+    .collapse-btn {
+      padding: 0.375rem;
+      border-radius: 0.5rem;
+      background: transparent;
+      border: none;
+      color: white;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .collapse-btn:hover {
+      background: #1e293b;
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      padding: 1rem 0;
+    }
+
+    .nav-item {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: left;
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+
+    .nav-item:hover {
+      background: #1e293b;
+      color: white;
+    }
+
+    .nav-item.active {
+      background: #4f46e5;
+      color: white;
+      border-right: 2px solid #818cf8;
+    }
+
+    .nav-item svg {
+      flex-shrink: 0;
+    }
+
+    .nav-label {
+      flex: 1;
+    }
+
+    .sidebar.collapsed .nav-label,
+    .sidebar.collapsed .nav-badge {
+      display: none;
+    }
+
+    .nav-badge {
+      background: #ef4444;
+      font-size: 0.75rem;
+      padding: 0.125rem 0.5rem;
+      border-radius: 9999px;
+    }
+
+    .sidebar-footer {
+      padding: 1rem;
+      border-top: 1px solid #334155;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .sidebar.collapsed .sidebar-footer {
+      justify-content: center;
+    }
+
+    .sidebar.collapsed .user-info,
+    .sidebar.collapsed .settings-icon {
+      display: none;
+    }
+
+    .user-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 9999px;
+      background: #4f46e5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.875rem;
+      font-weight: 700;
+    }
+
+    .user-info {
+      flex: 1;
+    }
+
+    .user-name {
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+
+    .user-email {
+      font-size: 0.75rem;
+      color: #94a3b8;
+    }
+
+    .settings-icon {
+      color: #94a3b8;
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      overflow: auto;
+    }
+
+    .page {
+      display: none;
+      padding: 1.5rem;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1.5rem;
+    }
+
+    .page-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+
+    .page-subtitle {
+      color: #64748b;
+      margin-top: 0.25rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background: #4f46e5;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #4338ca;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: #475569;
+      border: 1px solid #e2e8f0;
+    }
+
+    .btn-secondary:hover {
+      background: #f8fafc;
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .stat-card {
+      background: white;
+      border-radius: 0.75rem;
+      padding: 1.25rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      border: 1px solid #f1f5f9;
+    }
+
+    .stat-label {
+      font-size: 0.875rem;
+      color: #64748b;
+    }
+
+    .stat-value {
+      font-size: 1.875rem;
+      font-weight: 700;
+      color: #1e293b;
+      display: flex;
+      align-items: flex-end;
+      gap: 0.5rem;
+      margin-top: 0.25rem;
+    }
+
+    .stat-trend {
+      font-size: 0.875rem;
+      display: flex;
+      align-items: center;
+    }
+
+    .stat-trend.up {
+      color: #10b981;
+    }
+
+    .stat-trend.down {
+      color: #f43f5e;
+    }
+
+    /* Content Grid */
+    .content-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 1.5rem;
+    }
+
+    .card {
+      background: white;
+      border-radius: 0.75rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      border: 1px solid #f1f5f9;
+    }
+
+    .card-header {
+      padding: 1rem;
+      border-bottom: 1px solid #f1f5f9;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .card-title {
+      font-weight: 600;
+      color: #1e293b;
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .icon-btn {
+      padding: 0.5rem;
+      border-radius: 0.5rem;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      color: #64748b;
+    }
+
+    .icon-btn:hover {
+      background: #f1f5f9;
+    }
+
+    .card-body {
+      padding: 1rem;
+    }
+
+    /* Employee List */
+    .employee-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.75rem;
+      border-radius: 0.5rem;
+      transition: background 0.2s;
+    }
+
+    .employee-item:hover {
+      background: #f8fafc;
+    }
+
+    .status-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 9999px;
+    }
+
+    .status-dot.green { background: #10b981; }
+    .status-dot.yellow { background: #f59e0b; }
+    .status-dot.red { background: #ef4444; }
+
+    .employee-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 9999px;
+      background: #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 500;
+      color: #475569;
+    }
+
+    .employee-info {
+      flex: 1;
+    }
+
+    .employee-name {
+      font-weight: 500;
+      color: #1e293b;
+    }
+
+    .employee-role {
+      font-size: 0.875rem;
+      color: #64748b;
+    }
+
+    .progress-container {
+      width: 128px;
+    }
+
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .progress-label {
+      color: #64748b;
+    }
+
+    .progress-value {
+      font-weight: 500;
+    }
+
+    .progress-bar {
+      height: 8px;
+      background: #f1f5f9;
+      border-radius: 9999px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 9999px;
+    }
+
+    .progress-fill.green { background: #10b981; }
+    .progress-fill.yellow { background: #f59e0b; }
+    .progress-fill.red { background: #ef4444; }
+
+    /* Alerts */
+    .alert-item {
+      padding: 0.75rem;
+      border-radius: 0.5rem;
+      border-left: 4px solid;
+      margin-bottom: 0.75rem;
+    }
+
+    .alert-item.warning {
+      background: #fffbeb;
+      border-color: #f59e0b;
+    }
+
+    .alert-item.error {
+      background: #fef2f2;
+      border-color: #ef4444;
+    }
+
+    .alert-item.info {
+      background: #eff6ff;
+      border-color: #3b82f6;
+    }
+
+    .alert-msg {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #1e293b;
+    }
+
+    .alert-time {
+      font-size: 0.75rem;
+      color: #64748b;
+      margin-top: 0.25rem;
+    }
+
+    /* Process Builder */
+    .builder-header {
+      background: white;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .builder-title {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .builder-title h1 {
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+
+    .badge {
+      padding: 0.25rem 0.5rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    .badge-warning {
+      background: #fef3c7;
+      color: #b45309;
+    }
+
+    .badge-info {
+      background: #e0e7ff;
+      color: #4338ca;
+    }
+
+    .builder-layout {
+      display: flex;
+      height: calc(100vh - 144px);
+    }
+
+    .builder-palette {
+      width: 224px;
+      background: white;
+      border-right: 1px solid #e2e8f0;
+      padding: 1rem;
+    }
+
+    .palette-title {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.75rem;
+    }
+
+    .stage-type {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem;
+      background: #f8fafc;
+      border: 2px dashed #e2e8f0;
+      border-radius: 0.5rem;
+      cursor: grab;
+      margin-bottom: 0.5rem;
+      transition: border-color 0.2s;
+    }
+
+    .stage-type:hover {
+      border-color: #a5b4fc;
+    }
+
+    .stage-type svg {
+      color: #4f46e5;
+    }
+
+    .stage-type span {
+      flex: 1;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #475569;
+    }
+
+    .grip-icon {
+      color: #94a3b8;
+    }
+
+    .builder-canvas {
+      flex: 1;
+      background: #f1f5f9;
+      background-image: radial-gradient(circle, #d1d5db 1px, transparent 1px);
+      background-size: 20px 20px;
+      position: relative;
+      overflow: auto;
+    }
+
+    .stage-node {
+      position: absolute;
+      background: white;
+      border-radius: 0.75rem;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+      padding: 1rem;
+      width: 176px;
+      cursor: pointer;
+      transition: box-shadow 0.2s, transform 0.2s;
+      border: 2px solid transparent;
+    }
+
+    .stage-node:hover {
+      box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+    }
+
+    .stage-node.selected {
+      border-color: #4f46e5;
+    }
+
+    .stage-header {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .stage-icon {
+      margin-top: 2px;
+    }
+
+    .stage-icon.video { color: #a855f7; }
+    .stage-icon.document { color: #3b82f6; }
+    .stage-icon.meeting { color: #22c55e; }
+
+    .stage-title {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #1e293b;
+      line-height: 1.3;
+    }
+
+    .stage-badges {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+    }
+
+    .stage-badge {
+      padding: 0.125rem 0.5rem;
+      border-radius: 0.25rem;
+      font-size: 0.75rem;
+    }
+
+    .stage-badge.sla {
+      background: #f1f5f9;
+      color: #475569;
+    }
+
+    .stage-badge.feedback {
+      background: #e0e7ff;
+      color: #4338ca;
+    }
+
+    .builder-properties {
+      width: 288px;
+      background: white;
+      border-left: 1px solid #e2e8f0;
+      padding: 1rem;
+      display: none;
+    }
+
+    .builder-properties.open {
+      display: block;
+    }
+
+    .properties-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .properties-title {
+      font-weight: 600;
+      color: #1e293b;
+    }
+
+    .close-btn {
+      background: transparent;
+      border: none;
+      font-size: 1.25rem;
+      color: #94a3b8;
+      cursor: pointer;
+    }
+
+    .close-btn:hover {
+      color: #475569;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: #64748b;
+      text-transform: uppercase;
+      margin-bottom: 0.25rem;
+    }
+
+    .form-input,
+    .form-select,
+    .form-textarea {
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.5rem;
+      font-size: 0.875rem;
+      font-family: inherit;
+    }
+
+    .form-textarea {
+      resize: none;
+      height: 80px;
+    }
+
+    .checkbox-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.875rem;
+      color: #475569;
+    }
+
+    .checkbox-label input {
+      border-radius: 0.25rem;
+    }
+
+    .properties-actions {
+      display: flex;
+      gap: 0.5rem;
+      padding-top: 1rem;
+      border-top: 1px solid #e2e8f0;
+      margin-top: 1rem;
+    }
+
+    .properties-actions button {
+      flex: 1;
+      padding: 0.5rem;
+      font-size: 0.875rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.25rem;
+    }
+
+    .btn-duplicate {
+      background: transparent;
+      border: none;
+      color: #475569;
+    }
+
+    .btn-duplicate:hover {
+      background: #f1f5f9;
+    }
+
+    .btn-delete {
+      background: transparent;
+      border: none;
+      color: #ef4444;
+    }
+
+    .btn-delete:hover {
+      background: #fef2f2;
+    }
+
+    /* Connection Lines SVG */
+    .connections-svg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    /* Talent Table */
+    .filter-pills {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .filter-pill {
+      padding: 0.375rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.875rem;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .filter-pill.active {
+      background: #e0e7ff;
+      color: #4338ca;
+      font-weight: 500;
+    }
+
+    .filter-pill:not(.active) {
+      background: #f1f5f9;
+      color: #475569;
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .data-table th {
+      text-align: left;
+      padding: 1rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #64748b;
+      text-transform: uppercase;
+      background: #f8fafc;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .data-table td {
+      padding: 1rem;
+      border-bottom: 1px solid #f1f5f9;
+      font-size: 0.875rem;
+      color: #475569;
+    }
+
+    .data-table tr:hover {
+      background: #f8fafc;
+    }
+
+    .table-employee {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .table-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 9999px;
+      background: #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #475569;
+    }
+
+    .table-name {
+      font-weight: 500;
+      color: #1e293b;
+    }
+
+    .table-progress {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .table-progress-bar {
+      width: 80px;
+      height: 8px;
+      background: #f1f5f9;
+      border-radius: 9999px;
+      overflow: hidden;
+    }
+
+    .table-progress-fill {
+      height: 100%;
+      border-radius: 9999px;
+    }
+
+    /* Alert Center */
+    .alert-tabs {
+      display: flex;
+      gap: 1rem;
+      border-bottom: 1px solid #e2e8f0;
+      margin-bottom: 1.5rem;
+    }
+
+    .alert-tab {
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      color: #64748b;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+    }
+
+    .alert-tab:hover {
+      color: #1e293b;
+    }
+
+    .alert-tab.active {
+      color: #4f46e5;
+      border-bottom-color: #4f46e5;
+      font-weight: 500;
+    }
+
+    .alert-card {
+      background: white;
+      border-radius: 0.75rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      border-left: 4px solid;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .alert-card.escalation { border-color: #ef4444; }
+    .alert-card.breach { border-color: #f59e0b; }
+    .alert-card.feedback { border-color: #a855f7; }
+    .alert-card.reminder { border-color: #3b82f6; }
+
+    .alert-card-content {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    .alert-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .alert-icon.escalation { background: #fef2f2; color: #dc2626; }
+    .alert-icon.breach { background: #fffbeb; color: #d97706; }
+    .alert-icon.feedback { background: #faf5ff; color: #9333ea; }
+    .alert-icon.reminder { background: #eff6ff; color: #2563eb; }
+
+    .alert-card-title {
+      font-weight: 600;
+      color: #1e293b;
+    }
+
+    .alert-card-detail {
+      font-size: 0.875rem;
+      color: #64748b;
+      margin-top: 0.25rem;
+    }
+
+    .alert-card-detail strong {
+      font-weight: 500;
+    }
+
+    .alert-card-comment {
+      font-size: 0.875rem;
+      color: #475569;
+      font-style: italic;
+      margin-top: 0.5rem;
+    }
+
+    .alert-card-time {
+      font-size: 0.75rem;
+      color: #94a3b8;
+      margin-top: 0.5rem;
+    }
+
+    .alert-card-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    /* Analytics */
+    .analytics-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+
+    .chart-placeholder {
+      height: 192px;
+      background: #f8fafc;
+      border-radius: 0.5rem;
+      margin-bottom: 1rem;
+      position: relative;
+      padding: 1rem;
+    }
+
+    .chart-axis-y {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 32px;
+      width: 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: #94a3b8;
+    }
+
+    .chart-axis-x {
+      position: absolute;
+      bottom: 0;
+      left: 32px;
+      right: 0;
+      height: 24px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: #94a3b8;
+    }
+
+    .chart-point {
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      border-radius: 9999px;
+    }
+
+    .chart-point.good { background: #10b981; }
+    .chart-point.medium { background: #f59e0b; }
+    .chart-point.bad { background: #ef4444; }
+
+    .chart-label-y {
+      position: absolute;
+      left: 48px;
+      top: 50%;
+      transform: translateY(-50%) rotate(-90deg);
+      font-size: 0.75rem;
+      color: #94a3b8;
+      white-space: nowrap;
+    }
+
+    .chart-label-x {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.75rem;
+      color: #94a3b8;
+    }
+
+    .manager-table {
+      width: 100%;
+      font-size: 0.875rem;
+    }
+
+    .manager-table th {
+      text-align: left;
+      padding: 0.5rem 0;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #64748b;
+      text-transform: uppercase;
+    }
+
+    .manager-table th:not(:first-child) {
+      text-align: right;
+    }
+
+    .manager-table td {
+      padding: 0.5rem 0;
+      border-top: 1px solid #f1f5f9;
+    }
+
+    .manager-table td:not(:first-child) {
+      text-align: right;
+    }
+
+    .manager-name {
+      font-weight: 500;
+      color: #475569;
+    }
+
+    .time-good { color: #10b981; }
+    .time-bad { color: #ef4444; }
+
+    .satisfaction-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .satisfaction-label {
+      width: 160px;
+      font-size: 0.875rem;
+      color: #475569;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .satisfaction-track {
+      flex: 1;
+      height: 32px;
+      background: #f1f5f9;
+      border-radius: 0.5rem;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .satisfaction-fill {
+      height: 100%;
+    }
+
+    .satisfaction-fill.high { background: #34d399; }
+    .satisfaction-fill.medium { background: #fbbf24; }
+    .satisfaction-fill.low { background: #f87171; }
+
+    .satisfaction-value {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #475569;
+    }
+
+    .satisfaction-count {
+      width: 48px;
+      text-align: right;
+      font-size: 0.75rem;
+      color: #94a3b8;
+    }
+
+    .attention-box {
+      margin-top: 1.5rem;
+      padding: 0.75rem;
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 0.5rem;
+    }
+
+    .attention-title {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #991b1b;
+    }
+
+    .attention-text {
+      font-size: 0.875rem;
+      color: #b91c1c;
+      margin-top: 0.25rem;
+    }
+
+    /* Employee Portal */
+    .employee-container {
+      display: none;
+      flex-direction: column;
+      height: calc(100vh - 44px);
+    }
+
+    .employee-container.active {
+      display: flex;
+    }
+
+    .employee-navbar {
+      background: white;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 0 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .employee-logo {
+      font-weight: 700;
+      font-size: 1.125rem;
+      color: #1e293b;
+    }
+
+    .employee-tabs {
+      display: flex;
+      gap: 0.25rem;
+    }
+
+    .employee-tab {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #475569;
+      transition: all 0.2s;
+    }
+
+    .employee-tab:hover {
+      background: #f1f5f9;
+    }
+
+    .employee-tab.active {
+      background: #e0e7ff;
+      color: #4338ca;
+    }
+
+    .employee-nav-right {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .employee-nav-right svg {
+      color: #94a3b8;
+    }
+
+    .employee-main {
+      flex: 1;
+      overflow: auto;
+      background: #f8fafc;
+    }
+
+    .employee-page {
+      display: none;
+      max-width: 672px;
+      margin: 0 auto;
+      padding: 1.5rem;
+    }
+
+    .employee-page.active {
+      display: block;
+    }
+
+    /* Journey Hero */
+    .journey-hero {
+      background: linear-gradient(135deg, #4f46e5, #7c3aed);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      color: white;
+      margin-bottom: 2rem;
+    }
+
+    .journey-greeting {
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    .journey-subtitle {
+      color: #c7d2fe;
+      margin-top: 0.25rem;
+    }
+
+    .journey-progress {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .progress-circle {
+      width: 80px;
+      height: 80px;
+      position: relative;
+    }
+
+    .progress-circle svg {
+      transform: rotate(-90deg);
+    }
+
+    .progress-circle-bg {
+      fill: none;
+      stroke: rgba(255,255,255,0.2);
+      stroke-width: 6;
+    }
+
+    .progress-circle-fill {
+      fill: none;
+      stroke: white;
+      stroke-width: 6;
+      stroke-linecap: round;
+      stroke-dasharray: 220;
+      stroke-dashoffset: 66;
+    }
+
+    .progress-circle-text {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+
+    .progress-info {
+      font-size: 0.875rem;
+    }
+
+    .progress-info-label {
+      color: #c7d2fe;
+    }
+
+    .progress-info-value {
+      font-weight: 500;
+    }
+
+    /* Timeline */
+    .timeline {
+      position: relative;
+    }
+
+    .timeline-item {
+      display: flex;
+      gap: 1rem;
+      padding-bottom: 2rem;
+      position: relative;
+    }
+
+    .timeline-line {
+      position: absolute;
+      left: 20px;
+      top: 40px;
+      width: 2px;
+      height: calc(100% - 40px);
+      background: #e2e8f0;
+    }
+
+    .timeline-line.completed {
+      background: #34d399;
+    }
+
+    .timeline-dot {
+      width: 40px;
+      height: 40px;
+      border-radius: 9999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 1;
+      flex-shrink: 0;
+    }
+
+    .timeline-dot.completed {
+      background: #10b981;
+      color: white;
+    }
+
+    .timeline-dot.current {
+      background: #4f46e5;
+      color: white;
+      animation: pulse 2s infinite;
+    }
+
+    .timeline-dot.locked {
+      background: #e2e8f0;
+      color: #94a3b8;
+    }
+
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.4); }
+      50% { box-shadow: 0 0 0 8px rgba(79, 70, 229, 0); }
+    }
+
+    .timeline-card {
+      flex: 1;
+      border-radius: 0.75rem;
+      border: 1px solid #e2e8f0;
+      transition: all 0.2s;
+    }
+
+    .timeline-card.completed {
+      background: #f8fafc;
+      opacity: 0.7;
+    }
+
+    .timeline-card.current {
+      background: white;
+      border-color: #c7d2fe;
+      box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+    }
+
+    .timeline-card.locked {
+      background: #f8fafc;
+      opacity: 0.5;
+    }
+
+    .timeline-card-content {
+      padding: 1rem;
+    }
+
+    .timeline-date {
+      font-size: 0.75rem;
+      color: #64748b;
+    }
+
+    .timeline-title {
+      font-weight: 600;
+      color: #1e293b;
+      margin-top: 0.25rem;
+    }
+
+    .timeline-card.locked .timeline-title {
+      color: #94a3b8;
+    }
+
+    .timeline-rating {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      color: #f59e0b;
+    }
+
+    .timeline-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .timeline-description {
+      font-size: 0.875rem;
+      color: #475569;
+      margin-top: 1rem;
+    }
+
+    .timeline-action {
+      margin-top: 1rem;
+    }
+
+    .timeline-action-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: #4f46e5;
+      color: white;
+      border: none;
+      border-radius: 0.5rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .timeline-action-btn:hover {
+      background: #4338ca;
+    }
+
+    /* Tasks */
+    .task-item {
+      background: white;
+      border-radius: 0.75rem;
+      border: 1px solid #e2e8f0;
+      padding: 1rem;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      transition: box-shadow 0.2s;
+    }
+
+    .task-item:hover {
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+    }
+
+    .task-checkbox {
+      width: 20px;
+      height: 20px;
+      border-radius: 0.25rem;
+      margin-top: 2px;
+    }
+
+    .task-content {
+      flex: 1;
+    }
+
+    .task-title {
+      font-weight: 500;
+      color: #1e293b;
+    }
+
+    .task-stage {
+      font-size: 0.875rem;
+      color: #64748b;
+      margin-top: 0.125rem;
+    }
+
+    .task-due {
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+
+    .task-due.high { color: #ef4444; }
+    .task-due.medium { color: #f59e0b; }
+    .task-due.low { color: #64748b; }
+
+    /* Resources */
+    .resource-section {
+      margin-bottom: 1.5rem;
+    }
+
+    .resource-section-title {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.75rem;
+    }
+
+    .resource-item {
+      background: white;
+      border-radius: 0.75rem;
+      border: 1px solid #e2e8f0;
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.5rem;
+      cursor: pointer;
+      transition: box-shadow 0.2s;
+    }
+
+    .resource-item:hover {
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+    }
+
+    .resource-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .resource-icon.pdf { background: #fef2f2; color: #dc2626; }
+    .resource-icon.video { background: #faf5ff; color: #9333ea; }
+    .resource-icon.contact { background: #eff6ff; color: #2563eb; }
+
+    .resource-content {
+      flex: 1;
+    }
+
+    .resource-title {
+      font-weight: 500;
+      color: #1e293b;
+    }
+
+    .resource-subtitle {
+      font-size: 0.875rem;
+      color: #64748b;
+    }
+
+    .resource-arrow {
+      color: #94a3b8;
+    }
+
+    /* Profile */
+    .profile-card {
+      background: white;
+      border-radius: 0.75rem;
+      border: 1px solid #e2e8f0;
+      padding: 1.5rem;
+    }
+
+    .profile-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .profile-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 9999px;
+      background: #4f46e5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    .profile-name {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+
+    .profile-role {
+      color: #64748b;
+    }
+
+    .profile-date {
+      font-size: 0.875rem;
+      color: #94a3b8;
+    }
+
+    .profile-fields {
+      padding-top: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .profile-field-label {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: #64748b;
+      text-transform: uppercase;
+    }
+
+    .profile-field-value {
+      color: #1e293b;
+    }
+
+    .profile-edit-btn {
+      width: 100%;
+      margin-top: 1.5rem;
+      padding: 0.5rem;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.5rem;
+      background: transparent;
+      font-size: 0.875rem;
+      color: #475569;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: background 0.2s;
+    }
+
+    .profile-edit-btn:hover {
+      background: #f8fafc;
+    }
+
+    /* Feedback Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .modal {
+      background: white;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      width: 384px;
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+    }
+
+    .modal-title {
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+
+    .modal-subtitle {
+      font-size: 0.875rem;
+      color: #64748b;
+      margin-top: 0.25rem;
+    }
+
+    .star-rating {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      margin: 1.5rem 0;
+    }
+
+    .star-btn {
+      padding: 0.25rem;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      color: #e2e8f0;
+      transition: transform 0.2s, color 0.2s;
+    }
+
+    .star-btn:hover {
+      transform: scale(1.1);
+      color: #fbbf24;
+    }
+
+    .star-btn.active {
+      color: #fbbf24;
+    }
+
+    .modal-textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.5rem;
+      font-size: 0.875rem;
+      font-family: inherit;
+      resize: none;
+      height: 96px;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    .modal-actions button {
+      flex: 1;
+      padding: 0.5rem;
+      border-radius: 0.5rem;
+      font-size: 0.875rem;
+      cursor: pointer;
+    }
+
+    .modal-skip {
+      background: transparent;
+      border: 1px solid #e2e8f0;
+      color: #475569;
+    }
+
+    .modal-skip:hover {
+      background: #f8fafc;
+    }
+
+    .modal-submit {
+      background: #4f46e5;
+      border: none;
+      color: white;
+    }
+
+    .modal-submit:hover {
+      background: #4338ca;
+    }
+
+    /* Search Bar */
+    .search-bar {
+      position: relative;
+      width: 256px;
+    }
+
+    .search-bar svg {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #94a3b8;
+    }
+
+    .search-bar input {
+      width: 100%;
+      padding: 0.5rem 1rem 0.5rem 36px;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.5rem;
+      font-size: 0.875rem;
+    }
+
+    /* Utilities */
+    .hidden {
+      display: none !important;
+    }
+
+    .mt-6 {
+      margin-top: 1.5rem;
+    }
+  </style>
+</head>
+<body>
+  <!-- View Switcher -->
+  <div class="view-switcher">
+    <span>Wireframe Preview</span>
+    <div class="switcher-buttons">
+      <button class="switcher-btn active" onclick="switchView('admin')">Portal Admin</button>
+      <button class="switcher-btn" onclick="switchView('employee')">Portal Empleado</button>
+    </div>
+  </div>
+
+  <!-- Admin Portal -->
+  <div class="app-container" id="admin-portal">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <span class="sidebar-logo">OnboardHub</span>
+        <button class="collapse-btn" onclick="toggleSidebar()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M15 18l-6-6 6-6"/>
+          </svg>
+        </button>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <button class="nav-item active" onclick="showAdminPage('dashboard')">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/>
+          </svg>
+          <span class="nav-label">Dashboard</span>
+        </button>
+        <button class="nav-item" onclick="showAdminPage('processes')">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/>
+          </svg>
+          <span class="nav-label">Mis Procesos</span>
+        </button>
+        <button class="nav-item" onclick="showAdminPage('talent')">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+          <span class="nav-label">Gestión de Talento</span>
+        </button>
+        <button class="nav-item" onclick="showAdminPage('alerts')">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+          </svg>
+          <span class="nav-label">Centro de Alertas</span>
+          <span class="nav-badge">3</span>
+        </button>
+        <button class="nav-item" onclick="showAdminPage('analytics')">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
+          </svg>
+          <span class="nav-label">Analítica</span>
+        </button>
+      </nav>
+      
+      <div class="sidebar-footer">
+        <div class="user-avatar">A</div>
+        <div class="user-info">
+          <div class="user-name">Admin RRHH</div>
+          <div class="user-email"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="5e3f3a3337301e3b332e2c3b2d3f703d3133">[email&#160;protected]</a></div>
+        </div>
+        <svg class="settings-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Dashboard Page -->
+      <div class="page active" id="page-dashboard">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Dashboard</h1>
+            <p class="page-subtitle">Vista general del onboarding</p>
+          </div>
+          <button class="btn btn-primary">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+            Nuevo Proceso
+          </button>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-label">Procesos Activos</div>
+            <div class="stat-value">24 <span class="stat-trend up">↑ +3</span></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Empleados en Onboarding</div>
+            <div class="stat-value">47 <span class="stat-trend up">↑ +12</span></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Tareas Vencidas</div>
+            <div class="stat-value">8 <span class="stat-trend down">↓ -2</span></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">NPS Promedio</div>
+            <div class="stat-value">4.2 <span class="stat-trend up">↑ +0.3</span></div>
+          </div>
+        </div>
+
+        <div class="content-grid">
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">Estado de Empleados</h2>
+              <div class="card-actions">
+                <button class="icon-btn">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                  </svg>
+                </button>
+                <button class="icon-btn">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="employee-item">
+                <div class="status-dot green"></div>
+                <div class="employee-avatar">M</div>
+                <div class="employee-info">
+                  <div class="employee-name">María García</div>
+                  <div class="employee-role">Developer</div>
+                </div>
+                <div class="progress-container">
+                  <div class="progress-header">
+                    <span class="progress-label">Progreso</span>
+                    <span class="progress-value">75%</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-fill green" style="width: 75%"></div>
+                  </div>
+                </div>
+                <button class="icon-btn">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+                  </svg>
+                </button>
+              </div>
+              <div class="employee-item">
+                <div class="status-dot yellow"></div>
+                <div class="employee-avatar">C</div>
+                <div class="employee-info">
+                  <div class="employee-name">Carlos López</div>
+                  <div class="employee-role">Ventas</div>
+                </div>
+                <div class="progress-container">
+                  <div class="progress-header">
+                    <span class="progress-label">Progreso</span>
+                    <span class="progress-value">45%</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-fill yellow" style="width: 45%"></div>
+                  </div>
+                </div>
+                <button class="icon-btn">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+                  </svg>
+                </button>
+              </div>
+              <div class="employee-item">
+                <div class="status-dot red"></div>
+                <div class="employee-avatar">A</div>
+                <div class="employee-info">
+                  <div class="employee-name">Ana Martínez</div>
+                  <div class="employee-role">Marketing</div>
+                </div>
+                <div class="progress-container">
+                  <div class="progress-header">
+                    <span class="progress-label">Progreso</span>
+                    <span class="progress-value">20%</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-fill red" style="width: 20%"></div>
+                  </div>
+                </div>
+                <button class="icon-btn">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+                  </svg>
+                </button>
+              </div>
+              <div class="employee-item">
+                <div class="status-dot green"></div>
+                <div class="employee-avatar">P</div>
+                <div class="employee-info">
+                  <div class="employee-name">Pedro Sánchez</div>
+                  <div class="employee-role">Developer</div>
+                </div>
+                <div class="progress-container">
+                  <div class="progress-header">
+                    <span class="progress-label">Progreso</span>
+                    <span class="progress-value">90%</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-fill green" style="width: 90%"></div>
+                  </div>
+                </div>
+                <button class="icon-btn">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">Alertas Recientes</h2>
+            </div>
+            <div class="card-body">
+              <div class="alert-item warning">
+                <div class="alert-msg">SLA vencido: Reunión con jefe</div>
+                <div class="alert-time">Hace 2h</div>
+              </div>
+              <div class="alert-item error">
+                <div class="alert-msg">Escalamiento: Sin respuesta 48h</div>
+                <div class="alert-time">Hace 4h</div>
+              </div>
+              <div class="alert-item info">
+                <div class="alert-msg">Feedback negativo recibido</div>
+                <div class="alert-time">Hace 6h</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Process Builder Page -->
+      <div class="page" id="page-processes">
+        <div class="builder-header">
+          <div class="builder-title">
+            <h1>Onboarding Ventas</h1>
+            <span class="badge badge-warning">Borrador</span>
+          </div>
+          <div style="display: flex; gap: 0.5rem;">
+            <button class="btn btn-secondary">Vista Previa</button>
+            <button class="btn btn-primary">Publicar Versión</button>
+          </div>
+        </div>
+
+        <div class="builder-layout">
+          <div class="builder-palette">
+            <p class="palette-title">Tipos de Etapa</p>
+            <div class="stage-type">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+              </svg>
+              <span>Video</span>
+              <svg class="grip-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="9" cy="12" r="1"/><circle cx="9" cy="5" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="19" r="1"/>
+              </svg>
+            </div>
+            <div class="stage-type">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/>
+              </svg>
+              <span>Documento/Firma</span>
+              <svg class="grip-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="9" cy="12" r="1"/><circle cx="9" cy="5" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="19" r="1"/>
+              </svg>
+            </div>
+            <div class="stage-type">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+              </svg>
+              <span>Reunión</span>
+              <svg class="grip-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="9" cy="12" r="1"/><circle cx="9" cy="5" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="19" r="1"/>
+              </svg>
+            </div>
+
+            <p class="palette-title" style="margin-top: 1.5rem;">Target Role</p>
+            <select class="form-select">
+              <option>Ventas</option>
+              <option>Developers</option>
+              <option>Marketing</option>
+              <option>Operaciones</option>
+            </select>
+          </div>
+
+          <div class="builder-canvas">
+            <svg class="connections-svg">
+              <path d="M 280 105 Q 315 105 350 105" stroke="#94a3b8" stroke-width="2" fill="none"/>
+              <path d="M 530 105 Q 565 105 600 105" stroke="#94a3b8" stroke-width="2" fill="none"/>
+              <path d="M 280 105 Q 280 162 350 220" stroke="#94a3b8" stroke-width="2" fill="none"/>
+              <path d="M 530 245 Q 565 245 600 245" stroke="#94a3b8" stroke-width="2" fill="none"/>
+            </svg>
+
+            <div class="stage-node" style="left: 100px; top: 80px;" onclick="selectNode(this)">
+              <div class="stage-header">
+                <svg class="stage-icon video" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+                </svg>
+                <span class="stage-title">Video de Bienvenida</span>
+              </div>
+              <div class="stage-badges">
+                <span class="stage-badge sla">SLA: 1d</span>
+                <span class="stage-badge feedback">Feedback</span>
+              </div>
+            </div>
+
+            <div class="stage-node" style="left: 350px; top: 80px;" onclick="selectNode(this)">
+              <div class="stage-header">
+                <svg class="stage-icon document" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/>
+                </svg>
+                <span class="stage-title">Firma de Contrato</span>
+              </div>
+              <div class="stage-badges">
+                <span class="stage-badge sla">SLA: 2d</span>
+                <span class="stage-badge feedback">Feedback</span>
+              </div>
+            </div>
+
+            <div class="stage-node" style="left: 600px; top: 80px;" onclick="selectNode(this)">
+              <div class="stage-header">
+                <svg class="stage-icon meeting" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+                </svg>
+                <span class="stage-title">Reunión con Jefe</span>
+              </div>
+              <div class="stage-badges">
+                <span class="stage-badge sla">SLA: 3d</span>
+                <span class="stage-badge feedback">Feedback</span>
+              </div>
+            </div>
+
+            <div class="stage-node" style="left: 350px; top: 220px;" onclick="selectNode(this)">
+              <div class="stage-header">
+                <svg class="stage-icon video" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+                </svg>
+                <span class="stage-title">Capacitación Técnica</span>
+              </div>
+              <div class="stage-badges">
+                <span class="stage-badge sla">SLA: 5d</span>
+                <span class="stage-badge feedback">Feedback</span>
+              </div>
+            </div>
+
+            <div class="stage-node" style="left: 600px; top: 220px;" onclick="selectNode(this)">
+              <div class="stage-header">
+                <svg class="stage-icon meeting" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+                </svg>
+                <span class="stage-title">Presentación al Equipo</span>
+              </div>
+              <div class="stage-badges">
+                <span class="stage-badge sla">SLA: 5d</span>
+                <span class="stage-badge feedback">Feedback</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="builder-properties" id="properties-panel">
+            <div class="properties-header">
+              <h3 class="properties-title">Propiedades</h3>
+              <button class="close-btn" onclick="closeProperties()">×</button>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Título</label>
+              <input type="text" class="form-input" value="Video de Bienvenida">
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Descripción</label>
+              <textarea class="form-textarea" placeholder="Instrucciones para el empleado..."></textarea>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Responsable</label>
+              <select class="form-select">
+                <option>Jefe Directo</option>
+                <option>RRHH</option>
+                <option>TI</option>
+              </select>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">SLA (días)</label>
+              <input type="number" class="form-input" value="1">
+            </div>
+            
+            <div class="checkbox-group">
+              <label class="checkbox-label">
+                <input type="checkbox" checked>
+                Requiere Feedback
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox">
+                Etapa Bloqueante
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" checked>
+                Activar Alarmas
+              </label>
+            </div>
+            
+            <div class="properties-actions">
+              <button class="btn-duplicate">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                </svg>
+                Duplicar
+              </button>
+              <button class="btn-delete">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                </svg>
+                Eliminar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Talent Management Page -->
+      <div class="page" id="page-talent">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Gestión de Talento</h1>
+            <p class="page-subtitle">Directorio de empleados en onboarding</p>
+          </div>
+          <div style="display: flex; gap: 0.5rem;">
+            <div class="search-bar">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              </svg>
+              <input type="text" placeholder="Buscar empleado...">
+            </div>
+            <button class="btn btn-secondary">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="filter-pills">
+          <button class="filter-pill active">Todos (5)</button>
+          <button class="filter-pill">🟢 Al día (3)</button>
+          <button class="filter-pill">🟡 Por vencer (1)</button>
+          <button class="filter-pill">🔴 Atrasados (1)</button>
+        </div>
+
+        <div class="card">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Estado</th>
+                <th>Empleado</th>
+                <th>Rol</th>
+                <th>Fecha Ingreso</th>
+                <th>Manager</th>
+                <th>Tarea Actual</th>
+                <th>Progreso</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><div class="status-dot green"></div></td>
+                <td>
+                  <div class="table-employee">
+                    <div class="table-avatar">M</div>
+                    <span class="table-name">María García</span>
+                  </div>
+                </td>
+                <td>Developer</td>
+                <td>15 Nov 2024</td>
+                <td>Juan Pérez</td>
+                <td>Capacitación Técnica</td>
+                <td>
+                  <div class="table-progress">
+                    <div class="table-progress-bar">
+                      <div class="table-progress-fill" style="width: 75%; background: #10b981;"></div>
+                    </div>
+                    <span>75%</span>
+                  </div>
+                </td>
+                <td><button class="icon-btn">⋮</button></td>
+              </tr>
+              <tr>
+                <td><div class="status-dot yellow"></div></td>
+                <td>
+                  <div class="table-employee">
+                    <div class="table-avatar">C</div>
+                    <span class="table-name">Carlos López</span>
+                  </div>
+                </td>
+                <td>Ventas</td>
+                <td>18 Nov 2024</td>
+                <td>Ana Ruiz</td>
+                <td>Reunión con Jefe</td>
+                <td>
+                  <div class="table-progress">
+                    <div class="table-progress-bar">
+                      <div class="table-progress-fill" style="width: 45%; background: #f59e0b;"></div>
+                    </div>
+                    <span>45%</span>
+                  </div>
+                </td>
+                <td><button class="icon-btn">⋮</button></td>
+              </tr>
+              <tr>
+                <td><div class="status-dot red"></div></td>
+                <td>
+                  <div class="table-employee">
+                    <div class="table-avatar">A</div>
+                    <span class="table-name">Ana Martínez</span>
+                  </div>
+                </td>
+                <td>Marketing</td>
+                <td>20 Nov 2024</td>
+                <td>Pedro Gómez</td>
+                <td>Firma de Contrato</td>
+                <td>
+                  <div class="table-progress">
+                    <div class="table-progress-bar">
+                      <div class="table-progress-fill" style="width: 20%; background: #ef4444;"></div>
+                    </div>
+                    <span>20%</span>
+                  </div>
+                </td>
+                <td><button class="icon-btn">⋮</button></td>
+              </tr>
+              <tr>
+                <td><div class="status-dot green"></div></td>
+                <td>
+                  <div class="table-employee">
+                    <div class="table-avatar">P</div>
+                    <span class="table-name">Pedro Sánchez</span>
+                  </div>
+                </td>
+                <td>Developer</td>
+                <td>10 Nov 2024</td>
+                <td>Juan Pérez</td>
+                <td>Presentación al Equipo</td>
+                <td>
+                  <div class="table-progress">
+                    <div class="table-progress-bar">
+                      <div class="table-progress-fill" style="width: 90%; background: #10b981;"></div>
+                    </div>
+                    <span>90%</span>
+                  </div>
+                </td>
+                <td><button class="icon-btn">⋮</button></td>
+              </tr>
+              <tr>
+                <td><div class="status-dot green"></div></td>
+                <td>
+                  <div class="table-employee">
+                    <div class="table-avatar">L</div>
+                    <span class="table-name">Laura Fernández</span>
+                  </div>
+                </td>
+                <td>Operaciones</td>
+                <td>22 Nov 2024</td>
+                <td>María Luna</td>
+                <td>Video de Bienvenida</td>
+                <td>
+                  <div class="table-progress">
+                    <div class="table-progress-bar">
+                      <div class="table-progress-fill" style="width: 10%; background: #10b981;"></div>
+                    </div>
+                    <span>10%</span>
+                  </div>
+                </td>
+                <td><button class="icon-btn">⋮</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Alert Center Page -->
+      <div class="page" id="page-alerts">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Centro de Alertas</h1>
+            <p class="page-subtitle">Gestión por excepción</p>
+          </div>
+          <button class="btn btn-secondary">Marcar todas como leídas</button>
+        </div>
+
+        <div class="alert-tabs">
+          <button class="alert-tab active">Todas (4)</button>
+          <button class="alert-tab">Escalamientos (1)</button>
+          <button class="alert-tab">SLA Vencidos (1)</button>
+          <button class="alert-tab">Feedback (1)</button>
+          <button class="alert-tab">Recordatorios (1)</button>
+        </div>
+
+        <div class="alert-card escalation">
+          <div class="alert-card-content">
+            <div class="alert-icon escalation">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+              </svg>
+            </div>
+            <div>
+              <h3 class="alert-card-title">Escalamiento: Sin respuesta de Manager</h3>
+              <p class="alert-card-detail"><strong>Ana Martínez</strong> • Firma de Contrato</p>
+              <p class="alert-card-time">2 días de retraso</p>
+            </div>
+          </div>
+          <div class="alert-card-actions">
+            <button class="btn btn-primary">Marcar Completado</button>
+            <button class="btn btn-secondary">Ver Detalle</button>
+          </div>
+        </div>
+
+        <div class="alert-card breach">
+          <div class="alert-card-content">
+            <div class="alert-icon breach">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+              </svg>
+            </div>
+            <div>
+              <h3 class="alert-card-title">SLA Vencido</h3>
+              <p class="alert-card-detail"><strong>Carlos López</strong> • Reunión con Jefe</p>
+              <p class="alert-card-time">1 día de retraso</p>
+            </div>
+          </div>
+          <div class="alert-card-actions">
+            <button class="btn btn-primary">Marcar Completado</button>
+            <button class="btn btn-secondary">Ver Detalle</button>
+          </div>
+        </div>
+
+        <div class="alert-card feedback">
+          <div class="alert-card-content">
+            <div class="alert-icon feedback">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+              </svg>
+            </div>
+            <div>
+              <h3 class="alert-card-title">Feedback Negativo (2★)</h3>
+              <p class="alert-card-detail"><strong>Laura Díaz</strong> • Capacitación Técnica</p>
+              <p class="alert-card-comment">"El video estaba desactualizado"</p>
+              <p class="alert-card-time">Hace 3 horas</p>
+            </div>
+          </div>
+          <div class="alert-card-actions">
+            <button class="btn btn-secondary">Ver Detalle</button>
+          </div>
+        </div>
+
+        <div class="alert-card reminder">
+          <div class="alert-card-content">
+            <div class="alert-icon reminder">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+              </svg>
+            </div>
+            <div>
+              <h3 class="alert-card-title">Tarea por vencer mañana</h3>
+              <p class="alert-card-detail"><strong>María García</strong> • Presentación al Equipo</p>
+              <p class="alert-card-time">Vence en 18 horas</p>
+            </div>
+          </div>
+          <div class="alert-card-actions">
+            <button class="btn btn-primary">Marcar Completado</button>
+            <button class="btn btn-secondary">Ver Detalle</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Analytics Page -->
+      <div class="page" id="page-analytics">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Analítica</h1>
+            <p class="page-subtitle">Reportes de rendimiento y satisfacción</p>
+          </div>
+        </div>
+
+        <div class="analytics-grid">
+          <div class="card">
+            <div class="card-body">
+              <h2 class="card-title" style="margin-bottom: 1rem;">Rendimiento de Jefaturas</h2>
+              
+              <div class="chart-placeholder">
+                <div class="chart-axis-y">
+                  <span>5d</span>
+                  <span>3d</span>
+                  <span>1d</span>
+                </div>
+                <div class="chart-axis-x">
+                  <span>0</span>
+                  <span>5</span>
+                  <span>10</span>
+                </div>
+                <div class="chart-point good" style="left: 80%; bottom: 85%;" title="María Luna"></div>
+                <div class="chart-point good" style="left: 70%; bottom: 75%;" title="Juan Pérez"></div>
+                <div class="chart-point medium" style="left: 45%; bottom: 45%;" title="Ana Ruiz"></div>
+                <div class="chart-point bad" style="left: 30%; bottom: 20%;" title="Pedro Gómez"></div>
+                <p class="chart-label-y">← Tiempo Respuesta</p>
+                <p class="chart-label-x">Ingresos Gestionados →</p>
+              </div>
+
+              <table class="manager-table">
+                <thead>
+                  <tr>
+                    <th>Manager</th>
+                    <th>Promedio Días</th>
+                    <th>Onboardings</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="manager-name">Juan Pérez</td>
+                    <td class="time-good">1.2d</td>
+                    <td>8</td>
+                  </tr>
+                  <tr>
+                    <td class="manager-name">Ana Ruiz</td>
+                    <td class="time-good">2.8d</td>
+                    <td>5</td>
+                  </tr>
+                  <tr>
+                    <td class="manager-name">Pedro Gómez</td>
+                    <td class="time-bad">4.1d</td>
+                    <td>3</td>
+                  </tr>
+                  <tr>
+                    <td class="manager-name">María Luna</td>
+                    <td class="time-good">0.5d</td>
+                    <td>6</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-body">
+              <h2 class="card-title" style="margin-bottom: 1rem;">Satisfacción por Etapa</h2>
+              
+              <div class="satisfaction-bar">
+                <span class="satisfaction-label">Video de Bienvenida</span>
+                <div class="satisfaction-track">
+                  <div class="satisfaction-fill high" style="width: 92%;"></div>
+                  <span class="satisfaction-value">4.6 ★</span>
+                </div>
+                <span class="satisfaction-count">(47)</span>
+              </div>
+              <div class="satisfaction-bar">
+                <span class="satisfaction-label">Firma de Contrato</span>
+                <div class="satisfaction-track">
+                  <div class="satisfaction-fill high" style="width: 84%;"></div>
+                  <span class="satisfaction-value">4.2 ★</span>
+                </div>
+                <span class="satisfaction-count">(45)</span>
+              </div>
+              <div class="satisfaction-bar">
+                <span class="satisfaction-label">Reunión con Jefe</span>
+                <div class="satisfaction-track">
+                  <div class="satisfaction-fill low" style="width: 62%;"></div>
+                  <span class="satisfaction-value">3.1 ★</span>
+                </div>
+                <span class="satisfaction-count">(42)</span>
+              </div>
+              <div class="satisfaction-bar">
+                <span class="satisfaction-label">Capacitación Técnica</span>
+                <div class="satisfaction-track">
+                  <div class="satisfaction-fill medium" style="width: 76%;"></div>
+                  <span class="satisfaction-value">3.8 ★</span>
+                </div>
+                <span class="satisfaction-count">(38)</span>
+              </div>
+              <div class="satisfaction-bar">
+                <span class="satisfaction-label">Presentación al Equipo</span>
+                <div class="satisfaction-track">
+                  <div class="satisfaction-fill high" style="width: 88%;"></div>
+                  <span class="satisfaction-value">4.4 ★</span>
+                </div>
+                <span class="satisfaction-count">(35)</span>
+              </div>
+
+              <div class="attention-box">
+                <p class="attention-title">⚠️ Atención Requerida</p>
+                <p class="attention-text">"Reunión con Jefe" tiene la calificación más baja (3.1★). Comentario frecuente: "Se cancela constantemente".</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Employee Portal -->
+  <div class="employee-container" id="employee-portal">
+    <nav class="employee-navbar">
+      <span class="employee-logo">OnboardHub</span>
+      <div class="employee-tabs">
+        <button class="employee-tab active" onclick="showEmployeePage('journey')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+          </svg>
+          Mi Viaje
+        </button>
+        <button class="employee-tab" onclick="showEmployeePage('tasks')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+          </svg>
+          Mis Tareas
+        </button>
+        <button class="employee-tab" onclick="showEmployeePage('resources')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
+          </svg>
+          Recursos
+        </button>
+        <button class="employee-tab" onclick="showEmployeePage('profile')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+          </svg>
+          Perfil
+        </button>
+      </div>
+      <div class="employee-nav-right">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+        </svg>
+        <div class="user-avatar">M</div>
+      </div>
+    </nav>
+
+    <main class="employee-main">
+      <!-- Journey Page -->
+      <div class="employee-page active" id="emp-page-journey">
+        <div class="journey-hero">
+          <h1 class="journey-greeting">¡Hola, María! 👋</h1>
+          <p class="journey-subtitle">Tu proceso de onboarding va muy bien</p>
+          
+          <div class="journey-progress">
+            <div class="progress-circle">
+              <svg width="80" height="80">
+                <circle class="progress-circle-bg" cx="40" cy="40" r="35"/>
+                <circle class="progress-circle-fill" cx="40" cy="40" r="35"/>
+              </svg>
+              <span class="progress-circle-text">70%</span>
+            </div>
+            <div class="progress-info">
+              <p class="progress-info-label">Completado</p>
+              <p class="progress-info-value">3 de 5 etapas</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline">
+          <!-- Completed Stage 1 -->
+          <div class="timeline-item">
+            <div class="timeline-line completed"></div>
+            <div class="timeline-dot completed">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+            </div>
+            <div class="timeline-card completed">
+              <div class="timeline-card-content">
+                <div class="timeline-header">
+                  <div>
+                    <p class="timeline-date">15 Nov</p>
+                    <h3 class="timeline-title">Video de Bienvenida</h3>
+                  </div>
+                  <div class="timeline-rating">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Completed Stage 2 -->
+          <div class="timeline-item">
+            <div class="timeline-line completed"></div>
+            <div class="timeline-dot completed">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+            </div>
+            <div class="timeline-card completed">
+              <div class="timeline-card-content">
+                <div class="timeline-header">
+                  <div>
+                    <p class="timeline-date">16 Nov</p>
+                    <h3 class="timeline-title">Firma de Contrato</h3>
+                  </div>
+                  <div class="timeline-rating">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Current Stage -->
+          <div class="timeline-item">
+            <div class="timeline-line"></div>
+            <div class="timeline-dot current">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+              </svg>
+            </div>
+            <div class="timeline-card current">
+              <div class="timeline-card-content">
+                <div class="timeline-header">
+                  <div>
+                    <p class="timeline-date">18 Nov</p>
+                    <h3 class="timeline-title">Reunión con Jefe</h3>
+                  </div>
+                </div>
+                <p class="timeline-description">Agenda una reunión de 30 minutos con tu jefe directo para conocerse y revisar expectativas.</p>
+                <div class="timeline-action">
+                  <button class="timeline-action-btn" onclick="openFeedbackModal()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+                    </svg>
+                    Programar Reunión
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Locked Stage 4 -->
+          <div class="timeline-item">
+            <div class="timeline-line"></div>
+            <div class="timeline-dot locked">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              </svg>
+            </div>
+            <div class="timeline-card locked">
+              <div class="timeline-card-content">
+                <p class="timeline-date">20 Nov</p>
+                <h3 class="timeline-title">Capacitación Técnica</h3>
+              </div>
+            </div>
+          </div>
+
+          <!-- Locked Stage 5 -->
+          <div class="timeline-item">
+            <div class="timeline-dot locked">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              </svg>
+            </div>
+            <div class="timeline-card locked">
+              <div class="timeline-card-content">
+                <p class="timeline-date">22 Nov</p>
+                <h3 class="timeline-title">Presentación al Equipo</h3>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tasks Page -->
+      <div class="employee-page" id="emp-page-tasks">
+        <h1 class="page-title">Mis Tareas</h1>
+        <p class="page-subtitle">Pendientes de completar</p>
+
+        <div class="mt-6">
+          <div class="task-item">
+            <input type="checkbox" class="task-checkbox">
+            <div class="task-content">
+              <h3 class="task-title">Programar reunión con jefe</h3>
+              <p class="task-stage">Reunión con Jefe</p>
+            </div>
+            <span class="task-due high">Hoy</span>
+          </div>
+          <div class="task-item">
+            <input type="checkbox" class="task-checkbox">
+            <div class="task-content">
+              <h3 class="task-title">Completar formulario de datos bancarios</h3>
+              <p class="task-stage">Firma de Contrato</p>
+            </div>
+            <span class="task-due medium">Mañana</span>
+          </div>
+          <div class="task-item">
+            <input type="checkbox" class="task-checkbox">
+            <div class="task-content">
+              <h3 class="task-title">Subir foto de perfil</h3>
+              <p class="task-stage">Configuración</p>
+            </div>
+            <span class="task-due low">20 Nov</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Resources Page -->
+      <div class="employee-page" id="emp-page-resources">
+        <h1 class="page-title">Recursos</h1>
+        <p class="page-subtitle">Documentos y contactos útiles</p>
+
+        <div class="mt-6">
+          <div class="resource-section">
+            <h2 class="resource-section-title">Documentos</h2>
+            <div class="resource-item">
+              <div class="resource-icon pdf">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
+                </svg>
+              </div>
+              <div class="resource-content">
+                <h3 class="resource-title">Manual del Empleado</h3>
+              </div>
+              <svg class="resource-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+              </svg>
+            </div>
+            <div class="resource-item">
+              <div class="resource-icon pdf">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
+                </svg>
+              </div>
+              <div class="resource-content">
+                <h3 class="resource-title">Políticas de la Empresa</h3>
+              </div>
+              <svg class="resource-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+              </svg>
+            </div>
+            <div class="resource-item">
+              <div class="resource-icon pdf">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
+                </svg>
+              </div>
+              <div class="resource-content">
+                <h3 class="resource-title">Beneficios y Compensaciones</h3>
+              </div>
+              <svg class="resource-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+              </svg>
+            </div>
+          </div>
+
+          <div class="resource-section">
+            <h2 class="resource-section-title">Videos</h2>
+            <div class="resource-item">
+              <div class="resource-icon video">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polygon points="5 3 19 12 5 21 5 3"/>
+                </svg>
+              </div>
+              <div class="resource-content">
+                <h3 class="resource-title">Historia de la Empresa</h3>
+              </div>
+              <svg class="resource-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+              </svg>
+            </div>
+            <div class="resource-item">
+              <div class="resource-icon video">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polygon points="5 3 19 12 5 21 5 3"/>
+                </svg>
+              </div>
+              <div class="resource-content">
+                <h3 class="resource-title">Nuestros Valores</h3>
+              </div>
+              <svg class="resource-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+              </svg>
+            </div>
+          </div>
+
+          <div class="resource-section">
+            <h2 class="resource-section-title">Contactos Clave</h2>
+            <div class="resource-item">
+              <div class="resource-icon contact">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                </svg>
+              </div>
+              <div class="resource-content">
+                <h3 class="resource-title">Juan Pérez - Tu Jefe</h3>
+                <p class="resource-subtitle"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="751f00141b35101805071006145b161a18">[email&#160;protected]</a></p>
+              </div>
+              <svg class="resource-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+              </svg>
+            </div>
+            <div class="resource-item">
+              <div class="resource-icon contact">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                </svg>
+              </div>
+              <div class="resource-content">
+                <h3 class="resource-title">RRHH - Soporte</h3>
+                <p class="resource-subtitle"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="dcaeaeb4b49cb9b1acaeb9afbdf2bfb3b1">[email&#160;protected]</a></p>
+              </div>
+              <svg class="resource-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Profile Page -->
+      <div class="employee-page" id="emp-page-profile">
+        <h1 class="page-title">Mi Perfil</h1>
+        <p class="page-subtitle">Información personal</p>
+
+        <div class="mt-6">
+          <div class="profile-card">
+            <div class="profile-header">
+              <div class="profile-avatar">MG</div>
+              <div>
+                <h2 class="profile-name">María García</h2>
+                <p class="profile-role">Developer</p>
+                <p class="profile-date">Inicio: 15 Nov 2024</p>
+              </div>
+            </div>
+
+            <div class="profile-fields">
+              <div>
+                <p class="profile-field-label">Email</p>
+                <p class="profile-field-value"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="244945564d450a434556474d4564414954564157450a474b49">[email&#160;protected]</a></p>
+              </div>
+              <div>
+                <p class="profile-field-label">Departamento</p>
+                <p class="profile-field-value">Tecnología</p>
+              </div>
+              <div>
+                <p class="profile-field-label">Manager</p>
+                <p class="profile-field-value">Juan Pérez</p>
+              </div>
+              <div>
+                <p class="profile-field-label">Ubicación</p>
+                <p class="profile-field-value">Oficina Central - Piso 3</p>
+              </div>
+            </div>
+
+            <button class="profile-edit-btn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+              </svg>
+              Editar Información
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Feedback Modal -->
+  <div class="modal-overlay" id="feedback-modal">
+    <div class="modal">
+      <h3 class="modal-title">¿Cómo fue tu experiencia?</h3>
+      <p class="modal-subtitle">Califica esta etapa</p>
+      
+      <div class="star-rating">
+        <button class="star-btn" onclick="setRating(1)">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </button>
+        <button class="star-btn" onclick="setRating(2)">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </button>
+        <button class="star-btn" onclick="setRating(3)">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </button>
+        <button class="star-btn" onclick="setRating(4)">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </button>
+        <button class="star-btn" onclick="setRating(5)">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </button>
+      </div>
+
+      <textarea class="modal-textarea" placeholder="¿Algún comentario? (opcional)"></textarea>
+
+      <div class="modal-actions">
+        <button class="modal-skip" onclick="closeFeedbackModal()">Omitir</button>
+        <button class="modal-submit" onclick="closeFeedbackModal()">Enviar</button>
+      </div>
+    </div>
+  </div>
+
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    // View Switching
+    function switchView(view) {
+      const btns = document.querySelectorAll('.switcher-btn');
+      btns.forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+
+      document.getElementById('admin-portal').style.display = view === 'admin' ? 'flex' : 'none';
+      document.getElementById('employee-portal').classList.toggle('active', view === 'employee');
+    }
+
+    // Admin Sidebar Toggle
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      sidebar.classList.toggle('collapsed');
+    }
+
+    // Admin Page Navigation
+    function showAdminPage(pageId) {
+      // Update nav items
+      document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+      event.target.closest('.nav-item').classList.add('active');
+
+      // Show page
+      document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+      document.getElementById('page-' + pageId).classList.add('active');
+    }
+
+    // Process Builder Node Selection
+    function selectNode(node) {
+      document.querySelectorAll('.stage-node').forEach(n => n.classList.remove('selected'));
+      node.classList.add('selected');
+      document.getElementById('properties-panel').classList.add('open');
+    }
+
+    function closeProperties() {
+      document.getElementById('properties-panel').classList.remove('open');
+      document.querySelectorAll('.stage-node').forEach(n => n.classList.remove('selected'));
+    }
+
+    // Employee Page Navigation
+    function showEmployeePage(pageId) {
+      // Update tabs
+      document.querySelectorAll('.employee-tab').forEach(tab => tab.classList.remove('active'));
+      event.target.closest('.employee-tab').classList.add('active');
+
+      // Show page
+      document.querySelectorAll('.employee-page').forEach(page => page.classList.remove('active'));
+      document.getElementById('emp-page-' + pageId).classList.add('active');
+    }
+
+    // Feedback Modal
+    function openFeedbackModal() {
+      document.getElementById('feedback-modal').classList.add('open');
+    }
+
+    function closeFeedbackModal()

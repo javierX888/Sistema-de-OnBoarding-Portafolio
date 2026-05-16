@@ -1,0 +1,1735 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OnboardHub - Employee Mobile App</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #1a1a2e;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    /* Phone Frame */
+    .phone-frame {
+      width: 375px;
+      height: 812px;
+      background: #f8fafc;
+      border-radius: 40px;
+      overflow: hidden;
+      box-shadow: 
+        0 0 0 12px #1a1a2e,
+        0 0 0 14px #333,
+        0 50px 100px rgba(0,0,0,0.5);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Status Bar */
+    .status-bar {
+      height: 44px;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .status-bar-time {
+      color: #1e293b;
+    }
+
+    .status-bar-icons {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+    }
+
+    /* Dynamic Island */
+    .dynamic-island {
+      position: absolute;
+      top: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120px;
+      height: 32px;
+      background: #000;
+      border-radius: 20px;
+      z-index: 100;
+    }
+
+    /* App Content */
+    .app-content {
+      flex: 1;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Screen */
+    .screen {
+      flex: 1;
+      overflow-y: auto;
+      display: none;
+      flex-direction: column;
+    }
+
+    .screen.active {
+      display: flex;
+    }
+
+    /* Bottom Navigation */
+    .bottom-nav {
+      background: white;
+      border-top: 1px solid #e2e8f0;
+      padding: 8px 16px 28px;
+      display: flex;
+      justify-content: space-around;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 8px 16px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      border-radius: 12px;
+      transition: all 0.2s;
+    }
+
+    .nav-item svg {
+      color: #94a3b8;
+      transition: color 0.2s;
+    }
+
+    .nav-item span {
+      font-size: 11px;
+      font-weight: 500;
+      color: #94a3b8;
+      transition: color 0.2s;
+    }
+
+    .nav-item.active {
+      background: #eef2ff;
+    }
+
+    .nav-item.active svg {
+      color: #4f46e5;
+    }
+
+    .nav-item.active span {
+      color: #4f46e5;
+    }
+
+    /* ==================== JOURNEY SCREEN ==================== */
+    .journey-screen {
+      background: linear-gradient(180deg, #4f46e5 0%, #7c3aed 100%);
+    }
+
+    .journey-header {
+      padding: 20px 20px 0;
+      color: white;
+    }
+
+    .journey-greeting {
+      font-size: 28px;
+      font-weight: 800;
+      line-height: 1.2;
+    }
+
+    .journey-subtitle {
+      color: rgba(255,255,255,0.7);
+      margin-top: 4px;
+      font-size: 15px;
+    }
+
+    .journey-progress-card {
+      margin: 20px;
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .progress-ring {
+      position: relative;
+      width: 80px;
+      height: 80px;
+    }
+
+    .progress-ring svg {
+      transform: rotate(-90deg);
+    }
+
+    .progress-ring-bg {
+      fill: none;
+      stroke: rgba(255,255,255,0.2);
+      stroke-width: 8;
+    }
+
+    .progress-ring-fill {
+      fill: none;
+      stroke: white;
+      stroke-width: 8;
+      stroke-linecap: round;
+      stroke-dasharray: 201;
+      stroke-dashoffset: 60;
+      transition: stroke-dashoffset 0.5s;
+    }
+
+    .progress-ring-text {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: 800;
+      color: white;
+    }
+
+    .progress-details {
+      color: white;
+    }
+
+    .progress-label {
+      font-size: 13px;
+      opacity: 0.7;
+    }
+
+    .progress-value {
+      font-size: 18px;
+      font-weight: 700;
+      margin-top: 2px;
+    }
+
+    .progress-eta {
+      font-size: 12px;
+      opacity: 0.6;
+      margin-top: 8px;
+    }
+
+    .journey-content {
+      flex: 1;
+      background: #f8fafc;
+      border-radius: 28px 28px 0 0;
+      padding: 24px 20px;
+      margin-top: 8px;
+      overflow-y: auto;
+    }
+
+    .section-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 16px;
+    }
+
+    /* Timeline */
+    .timeline {
+      position: relative;
+    }
+
+    .timeline-item {
+      display: flex;
+      gap: 16px;
+      padding-bottom: 24px;
+      position: relative;
+    }
+
+    .timeline-item:last-child {
+      padding-bottom: 0;
+    }
+
+    .timeline-line {
+      position: absolute;
+      left: 16px;
+      top: 40px;
+      width: 2px;
+      height: calc(100% - 40px);
+      background: #e2e8f0;
+    }
+
+    .timeline-line.completed {
+      background: #10b981;
+    }
+
+    .timeline-marker {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    .timeline-marker.completed {
+      background: #10b981;
+      color: white;
+    }
+
+    .timeline-marker.current {
+      background: #4f46e5;
+      color: white;
+      box-shadow: 0 0 0 6px rgba(79, 70, 229, 0.2);
+      animation: pulse-ring 2s infinite;
+    }
+
+    @keyframes pulse-ring {
+      0%, 100% { box-shadow: 0 0 0 6px rgba(79, 70, 229, 0.2); }
+      50% { box-shadow: 0 0 0 10px rgba(79, 70, 229, 0); }
+    }
+
+    .timeline-marker.locked {
+      background: #e2e8f0;
+      color: #94a3b8;
+    }
+
+    .timeline-card {
+      flex: 1;
+      background: white;
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      border: 1px solid #f1f5f9;
+      transition: all 0.2s;
+    }
+
+    .timeline-card.completed {
+      opacity: 0.6;
+    }
+
+    .timeline-card.current {
+      border-color: #c7d2fe;
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.15);
+    }
+
+    .timeline-card.locked {
+      opacity: 0.5;
+    }
+
+    .timeline-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .timeline-card-date {
+      font-size: 12px;
+      color: #94a3b8;
+    }
+
+    .timeline-card-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: #1e293b;
+      margin-top: 4px;
+    }
+
+    .timeline-card.locked .timeline-card-title {
+      color: #94a3b8;
+    }
+
+    .timeline-rating {
+      display: flex;
+      gap: 2px;
+      color: #fbbf24;
+    }
+
+    .timeline-card-desc {
+      font-size: 13px;
+      color: #64748b;
+      margin-top: 12px;
+      line-height: 1.5;
+    }
+
+    .timeline-card-action {
+      margin-top: 16px;
+    }
+
+    .btn-primary {
+      width: 100%;
+      padding: 12px;
+      background: #4f46e5;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background 0.2s;
+    }
+
+    .btn-primary:active {
+      background: #4338ca;
+    }
+
+    /* ==================== TASKS SCREEN ==================== */
+    .tasks-screen {
+      background: #f8fafc;
+    }
+
+    .screen-header {
+      background: white;
+      padding: 16px 20px 20px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .screen-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1e293b;
+    }
+
+    .screen-subtitle {
+      font-size: 14px;
+      color: #64748b;
+      margin-top: 4px;
+    }
+
+    .tasks-filter {
+      display: flex;
+      gap: 8px;
+      padding: 16px 20px;
+      overflow-x: auto;
+    }
+
+    .filter-chip {
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 500;
+      border: none;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+
+    .filter-chip.active {
+      background: #4f46e5;
+      color: white;
+    }
+
+    .filter-chip:not(.active) {
+      background: white;
+      color: #64748b;
+      border: 1px solid #e2e8f0;
+    }
+
+    .tasks-list {
+      padding: 0 20px 20px;
+    }
+
+    .task-card {
+      background: white;
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 12px;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      border: 1px solid #f1f5f9;
+    }
+
+    .task-checkbox {
+      width: 24px;
+      height: 24px;
+      border-radius: 8px;
+      border: 2px solid #e2e8f0;
+      cursor: pointer;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .task-checkbox.checked {
+      background: #10b981;
+      border-color: #10b981;
+      color: white;
+    }
+
+    .task-content {
+      flex: 1;
+    }
+
+    .task-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: #1e293b;
+    }
+
+    .task-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .task-stage {
+      font-size: 12px;
+      color: #64748b;
+    }
+
+    .task-due {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+
+    .task-due.urgent {
+      background: #fef2f2;
+      color: #dc2626;
+    }
+
+    .task-due.soon {
+      background: #fffbeb;
+      color: #d97706;
+    }
+
+    .task-due.normal {
+      background: #f1f5f9;
+      color: #64748b;
+    }
+
+    .task-chevron {
+      color: #94a3b8;
+    }
+
+    /* ==================== RESOURCES SCREEN ==================== */
+    .resources-screen {
+      background: #f8fafc;
+    }
+
+    .search-bar {
+      margin: 16px 20px;
+      position: relative;
+    }
+
+    .search-bar input {
+      width: 100%;
+      padding: 14px 16px 14px 44px;
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      font-size: 15px;
+      font-family: inherit;
+    }
+
+    .search-bar input::placeholder {
+      color: #94a3b8;
+    }
+
+    .search-bar svg {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #94a3b8;
+    }
+
+    .resources-section {
+      padding: 0 20px 24px;
+    }
+
+    .resource-card {
+      background: white;
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      border: 1px solid #f1f5f9;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .resource-card:active {
+      transform: scale(0.98);
+    }
+
+    .resource-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .resource-icon.pdf {
+      background: linear-gradient(135deg, #fee2e2, #fecaca);
+      color: #dc2626;
+    }
+
+    .resource-icon.video {
+      background: linear-gradient(135deg, #f3e8ff, #e9d5ff);
+      color: #9333ea;
+    }
+
+    .resource-icon.contact {
+      background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+      color: #2563eb;
+    }
+
+    .resource-icon.link {
+      background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+      color: #059669;
+    }
+
+    .resource-content {
+      flex: 1;
+    }
+
+    .resource-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: #1e293b;
+    }
+
+    .resource-subtitle {
+      font-size: 13px;
+      color: #64748b;
+      margin-top: 2px;
+    }
+
+    .resource-arrow {
+      color: #94a3b8;
+    }
+
+    /* ==================== PROFILE SCREEN ==================== */
+    .profile-screen {
+      background: #f8fafc;
+    }
+
+    .profile-header-card {
+      background: linear-gradient(135deg, #4f46e5, #7c3aed);
+      margin: 20px;
+      border-radius: 24px;
+      padding: 24px;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .profile-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      font-weight: 800;
+      margin-bottom: 12px;
+      border: 3px solid rgba(255,255,255,0.3);
+    }
+
+    .profile-name {
+      font-size: 22px;
+      font-weight: 800;
+    }
+
+    .profile-role {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 4px;
+    }
+
+    .profile-stats {
+      display: flex;
+      gap: 32px;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .profile-stat {
+      text-align: center;
+    }
+
+    .profile-stat-value {
+      font-size: 24px;
+      font-weight: 800;
+    }
+
+    .profile-stat-label {
+      font-size: 12px;
+      opacity: 0.7;
+      margin-top: 2px;
+    }
+
+    .profile-section {
+      padding: 0 20px 20px;
+    }
+
+    .profile-menu-card {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      border: 1px solid #f1f5f9;
+    }
+
+    .profile-menu-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px;
+      border-bottom: 1px solid #f1f5f9;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .profile-menu-item:last-child {
+      border-bottom: none;
+    }
+
+    .profile-menu-item:active {
+      background: #f8fafc;
+    }
+
+    .profile-menu-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .profile-menu-icon.blue {
+      background: #eff6ff;
+      color: #2563eb;
+    }
+
+    .profile-menu-icon.purple {
+      background: #faf5ff;
+      color: #9333ea;
+    }
+
+    .profile-menu-icon.green {
+      background: #ecfdf5;
+      color: #059669;
+    }
+
+    .profile-menu-icon.orange {
+      background: #fff7ed;
+      color: #ea580c;
+    }
+
+    .profile-menu-icon.red {
+      background: #fef2f2;
+      color: #dc2626;
+    }
+
+    .profile-menu-content {
+      flex: 1;
+    }
+
+    .profile-menu-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: #1e293b;
+    }
+
+    .profile-menu-subtitle {
+      font-size: 13px;
+      color: #64748b;
+      margin-top: 2px;
+    }
+
+    .profile-menu-arrow {
+      color: #94a3b8;
+    }
+
+    /* ==================== NOTIFICATIONS SCREEN ==================== */
+    .notifications-screen {
+      background: #f8fafc;
+    }
+
+    .notification-card {
+      background: white;
+      margin: 0 20px 12px;
+      border-radius: 16px;
+      padding: 16px;
+      display: flex;
+      gap: 14px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      border: 1px solid #f1f5f9;
+    }
+
+    .notification-card.unread {
+      border-left: 4px solid #4f46e5;
+    }
+
+    .notification-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .notification-icon.reminder {
+      background: #eff6ff;
+      color: #2563eb;
+    }
+
+    .notification-icon.success {
+      background: #ecfdf5;
+      color: #059669;
+    }
+
+    .notification-icon.warning {
+      background: #fffbeb;
+      color: #d97706;
+    }
+
+    .notification-content {
+      flex: 1;
+    }
+
+    .notification-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #1e293b;
+    }
+
+    .notification-desc {
+      font-size: 13px;
+      color: #64748b;
+      margin-top: 4px;
+      line-height: 1.4;
+    }
+
+    .notification-time {
+      font-size: 12px;
+      color: #94a3b8;
+      margin-top: 8px;
+    }
+
+    /* ==================== MODAL ==================== */
+    .modal-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      align-items: flex-end;
+      z-index: 50;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .modal-sheet {
+      background: white;
+      border-radius: 24px 24px 0 0;
+      width: 100%;
+      padding: 24px 20px 40px;
+      animation: slideUp 0.3s ease;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }
+
+    .modal-handle {
+      width: 40px;
+      height: 4px;
+      background: #e2e8f0;
+      border-radius: 2px;
+      margin: 0 auto 20px;
+    }
+
+    .modal-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #1e293b;
+      text-align: center;
+    }
+
+    .modal-subtitle {
+      font-size: 14px;
+      color: #64748b;
+      text-align: center;
+      margin-top: 4px;
+    }
+
+    .star-rating {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin: 24px 0;
+    }
+
+    .star-btn {
+      padding: 8px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      color: #e2e8f0;
+      transition: all 0.2s;
+    }
+
+    .star-btn:active {
+      transform: scale(1.2);
+    }
+
+    .star-btn.active {
+      color: #fbbf24;
+    }
+
+    .modal-textarea {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      font-size: 15px;
+      font-family: inherit;
+      resize: none;
+      height: 100px;
+    }
+
+    .modal-textarea::placeholder {
+      color: #94a3b8;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .modal-btn {
+      flex: 1;
+      padding: 14px;
+      border-radius: 14px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .modal-btn.secondary {
+      background: #f1f5f9;
+      border: none;
+      color: #64748b;
+    }
+
+    .modal-btn.primary {
+      background: #4f46e5;
+      border: none;
+      color: white;
+    }
+
+    /* ==================== TASK DETAIL MODAL ==================== */
+    .task-detail-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .task-detail-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #eef2ff, #e0e7ff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #4f46e5;
+    }
+
+    .task-detail-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #1e293b;
+    }
+
+    .task-detail-stage {
+      font-size: 13px;
+      color: #64748b;
+      margin-top: 2px;
+    }
+
+    .task-detail-info {
+      background: #f8fafc;
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 20px;
+    }
+
+    .task-detail-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .task-detail-row:last-child {
+      border-bottom: none;
+    }
+
+    .task-detail-label {
+      font-size: 14px;
+      color: #64748b;
+    }
+
+    .task-detail-value {
+      font-size: 14px;
+      font-weight: 600;
+      color: #1e293b;
+    }
+
+    .task-detail-value.urgent {
+      color: #dc2626;
+    }
+
+    /* Scrollbar */
+    .screen::-webkit-scrollbar {
+      width: 0;
+    }
+
+    /* Helper */
+    .scroll-content {
+      flex: 1;
+      overflow-y: auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="phone-frame">
+    <div class="dynamic-island"></div>
+    
+    <!-- Status Bar -->
+    <div class="status-bar">
+      <span class="status-bar-time">9:41</span>
+      <div class="status-bar-icons">
+        <svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor">
+          <path d="M1 4.5C1 3.67 1.67 3 2.5 3h2C5.33 3 6 3.67 6 4.5v3C6 8.33 5.33 9 4.5 9h-2C1.67 9 1 8.33 1 7.5v-3zM7 3.5C7 2.67 7.67 2 8.5 2h2C11.33 2 12 2.67 12 3.5v4c0 .83-.67 1.5-1.5 1.5h-2C7.67 8 7 7.33 7 6.5v-3zM13 2.5c0-.83.67-1.5 1.5-1.5h2c.83 0 1.5.67 1.5 1.5v5c0 .83-.67 1.5-1.5 1.5h-2c-.83 0-1.5-.67-1.5-1.5v-5z"/>
+        </svg>
+        <svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor">
+          <path d="M8 2C5.79 2 3.79 2.78 2.24 4.12l-1.41-1.41C2.69 1.09 5.21 0 8 0s5.31 1.09 7.17 2.71l-1.41 1.41C12.21 2.78 10.21 2 8 2zm0 4c-1.38 0-2.63.56-3.54 1.46l-1.41-1.41C4.37 4.74 6.09 4 8 4s3.63.74 4.95 2.05l-1.41 1.41C10.63 6.56 9.38 6 8 6zm0 4c-.55 0-1.05.22-1.41.59L8 12l1.41-1.41C9.05 10.22 8.55 10 8 10z"/>
+        </svg>
+        <svg width="25" height="12" viewBox="0 0 25 12" fill="none">
+          <rect x="0.5" y="0.5" width="21" height="11" rx="2.5" stroke="currentColor"/>
+          <rect x="2" y="2" width="16" height="8" rx="1" fill="#34D399"/>
+          <path d="M23 4v4a2 2 0 0 0 2-2 2 2 0 0 0-2-2z" fill="currentColor"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="app-content">
+      <!-- Journey Screen -->
+      <div class="screen active" id="screen-journey">
+        <div class="journey-screen">
+          <div class="journey-header">
+            <h1 class="journey-greeting">¡Hola, María! 👋</h1>
+            <p class="journey-subtitle">Tu proceso de onboarding va muy bien</p>
+          </div>
+
+          <div class="journey-progress-card">
+            <div class="progress-ring">
+              <svg width="80" height="80">
+                <circle class="progress-ring-bg" cx="40" cy="40" r="32"/>
+                <circle class="progress-ring-fill" cx="40" cy="40" r="32"/>
+              </svg>
+              <span class="progress-ring-text">70%</span>
+            </div>
+            <div class="progress-details">
+              <p class="progress-label">Completado</p>
+              <p class="progress-value">3 de 5 etapas</p>
+              <p class="progress-eta">⏱ Faltan ~2 días</p>
+            </div>
+          </div>
+
+          <div class="journey-content">
+            <h2 class="section-title">Tu Ruta</h2>
+
+            <div class="timeline">
+              <!-- Completed 1 -->
+              <div class="timeline-item">
+                <div class="timeline-line completed"></div>
+                <div class="timeline-marker completed">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                </div>
+                <div class="timeline-card completed">
+                  <div class="timeline-card-header">
+                    <div>
+                      <p class="timeline-card-date">15 Nov</p>
+                      <h3 class="timeline-card-title">Video de Bienvenida</h3>
+                    </div>
+                    <div class="timeline-rating">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Completed 2 -->
+              <div class="timeline-item">
+                <div class="timeline-line completed"></div>
+                <div class="timeline-marker completed">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                </div>
+                <div class="timeline-card completed">
+                  <div class="timeline-card-header">
+                    <div>
+                      <p class="timeline-card-date">16 Nov</p>
+                      <h3 class="timeline-card-title">Firma de Contrato</h3>
+                    </div>
+                    <div class="timeline-rating">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Current -->
+              <div class="timeline-item">
+                <div class="timeline-line"></div>
+                <div class="timeline-marker current">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/>
+                  </svg>
+                </div>
+                <div class="timeline-card current">
+                  <div class="timeline-card-header">
+                    <div>
+                      <p class="timeline-card-date">18 Nov</p>
+                      <h3 class="timeline-card-title">Reunión con Jefe</h3>
+                    </div>
+                  </div>
+                  <p class="timeline-card-desc">Agenda una reunión de 30 minutos con tu jefe directo para conocerse.</p>
+                  <div class="timeline-card-action">
+                    <button class="btn-primary" onclick="openFeedbackModal()">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                      </svg>
+                      Programar Reunión
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Locked 1 -->
+              <div class="timeline-item">
+                <div class="timeline-line"></div>
+                <div class="timeline-marker locked">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                  </svg>
+                </div>
+                <div class="timeline-card locked">
+                  <p class="timeline-card-date">20 Nov</p>
+                  <h3 class="timeline-card-title">Capacitación Técnica</h3>
+                </div>
+              </div>
+
+              <!-- Locked 2 -->
+              <div class="timeline-item">
+                <div class="timeline-marker locked">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                  </svg>
+                </div>
+                <div class="timeline-card locked">
+                  <p class="timeline-card-date">22 Nov</p>
+                  <h3 class="timeline-card-title">Presentación al Equipo</h3>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tasks Screen -->
+      <div class="screen" id="screen-tasks">
+        <div class="tasks-screen">
+          <div class="screen-header">
+            <h1 class="screen-title">Mis Tareas</h1>
+            <p class="screen-subtitle">3 pendientes</p>
+          </div>
+
+          <div class="tasks-filter">
+            <button class="filter-chip active">Todas</button>
+            <button class="filter-chip">Hoy</button>
+            <button class="filter-chip">Esta semana</button>
+            <button class="filter-chip">Completadas</button>
+          </div>
+
+          <div class="scroll-content">
+            <div class="tasks-list">
+              <div class="task-card" onclick="openTaskDetail()">
+                <div class="task-checkbox"></div>
+                <div class="task-content">
+                  <h3 class="task-title">Programar reunión con jefe</h3>
+                  <div class="task-meta">
+                    <span class="task-stage">Reunión con Jefe</span>
+                    <span class="task-due urgent">Hoy</span>
+                  </div>
+                </div>
+                <svg class="task-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="9 18 15 12 9 6"/>
+                </svg>
+              </div>
+
+              <div class="task-card">
+                <div class="task-checkbox"></div>
+                <div class="task-content">
+                  <h3 class="task-title">Completar datos bancarios</h3>
+                  <div class="task-meta">
+                    <span class="task-stage">Firma de Contrato</span>
+                    <span class="task-due soon">Mañana</span>
+                  </div>
+                </div>
+                <svg class="task-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="9 18 15 12 9 6"/>
+                </svg>
+              </div>
+
+              <div class="task-card">
+                <div class="task-checkbox"></div>
+                <div class="task-content">
+                  <h3 class="task-title">Subir foto de perfil</h3>
+                  <div class="task-meta">
+                    <span class="task-stage">Configuración</span>
+                    <span class="task-due normal">20 Nov</span>
+                  </div>
+                </div>
+                <svg class="task-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="9 18 15 12 9 6"/>
+                </svg>
+              </div>
+
+              <div class="task-card">
+                <div class="task-checkbox checked">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                </div>
+                <div class="task-content" style="opacity: 0.5;">
+                  <h3 class="task-title" style="text-decoration: line-through;">Ver video de bienvenida</h3>
+                  <div class="task-meta">
+                    <span class="task-stage">Video de Bienvenida</span>
+                  </div>
+                </div>
+                <svg class="task-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="9 18 15 12 9 6"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Resources Screen -->
+      <div class="screen" id="screen-resources">
+        <div class="resources-screen">
+          <div class="screen-header">
+            <h1 class="screen-title">Recursos</h1>
+            <p class="screen-subtitle">Todo lo que necesitas saber</p>
+          </div>
+
+          <div class="search-bar">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            <input type="text" placeholder="Buscar recursos...">
+          </div>
+
+          <div class="scroll-content">
+            <div class="resources-section">
+              <h2 class="section-title">Documentos</h2>
+              <div class="resource-card">
+                <div class="resource-icon pdf">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
+                  </svg>
+                </div>
+                <div class="resource-content">
+                  <h3 class="resource-title">Manual del Empleado</h3>
+                  <p class="resource-subtitle">PDF • 2.4 MB</p>
+                </div>
+                <svg class="resource-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="9 18 15 12 9 6"/>
+                </svg>
+              </div>
+              <div class="resource-card">
+                <div class="resource-icon pdf">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
+                  </svg>
+                </div>
+                <div class="resource-content">
+                  <h3 class="resource-title">Políticas de la Empresa</h3>
+                  <p class="resource-subtitle">PDF • 1.8 MB</p>
+                </div>
+                <svg class="resource-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="9 18 15 12 9 6"/>
+                </svg>
+              </div>
+              <div class="resource-card">
+                <div class="resource-icon pdf">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
+                  </svg>
+                </div>
+                <div class="resource-content">
+                  <h3 class="resource-title">Beneficios y Compensaciones</h3>
+                  <p class="resource-subtitle">PDF • 980 KB</p>
+                </div>
+                <svg class="resource-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="9 18 15 12 9 6"/>
+                </svg>
+              </div>
+            </div>
+
+            <div class="resources-section">
+              <h2 class="section-title">Videos</h2>
+              <div class="resource-card">
+                <div class="resource-icon video">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="5 3 19 12 5 21 5 3"/>
+                  </svg>
+                </div>
+                <div class="resource-content">
+                  <h3 class="resource-title">Historia de la Empresa</h3>
+                  <p class="resource-subtitle">Video • 8 min</p>
+                </div>
+                <svg class="resource-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="9 18 15 12 9 6"/>
+                </svg>
+              </div>
+              <div class="resource-card">
+                <div class="resource-icon video">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="5 3 19 12 5 21 5 3"/>
+                  </svg>
+                </div>
+                <div class="resource-content">
+                  <h3 class="resource-title">Nuestros Valores</h3>
+                  <p class="resource-subtitle">Video • 5 min</p>
+                </div>
+                <svg class="resource-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="9 18 15 12 9 6"/>
+                </svg>
+              </div>
+            </div>
+
+            <div class="resources-section">
+              <h2 class="section-title">Contactos Clave</h2>
+              <div class="resource-card">
+                <div class="resource-icon contact">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                  </svg>
+                </div>
+                <div class="resource-content">
+                  <h3 class="resource-title">Juan Pérez</h3>
+                  <p class="resource-subtitle">Tu Jefe Directo</p>
+                </div>
+                <svg class="resource-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="9 18 15 12 9 6"/>
+                </svg>
+              </div>
+              <div class="resource-card">
+                <div class="resource-icon contact">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                  </svg>
+                </div>
+                <div class="resource-content">
+                  <h3 class="resource-title">RRHH - Soporte</h3>
+                  <p class="resource-subtitle">rrhh@empresa.com</p>
+                </div>
+                <svg class="resource-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="9 18 15 12 9 6"/>
+                </svg>
+              </div>
+            </div>
+
+            <div class="resources-section">
+              <h2 class="section-title">Enlaces Útiles</h2>
+              <div class="resource-card">
+                <div class="resource-icon link">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+                  </svg>
+                </div>
+                <div class="resource-content">
+                  <h3 class="resource-title">Portal del Empleado</h3>
+                  <p class="resource-subtitle">portal.empresa.com</p>
+                </div>
+                <svg class="resource-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="9 18 15 12 9 6"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Profile Screen -->
+      <div class="screen" id="screen-profile">
+        <div class="profile-screen scroll-content">
+          <div class="profile-header-card">
+            <div class="profile-avatar">MG</div>
+            <h1 class="profile-name">María García</h1>
+            <p class="profile-role">Developer • Tecnología</p>
+            <div class="profile-stats">
+              <div class="profile-stat">
+                <div class="profile-stat-value">70%</div>
+                <div class="profile-stat-label">Completado</div>
+              </div>
+              <div class="profile-stat">
+                <div class="profile-stat-value">7</div>
+                <div class="profile-stat-label">Días</div>
+              </div>
+              <div class="profile-stat">
+                <div class="profile-stat-value">4.5</div>
+                <div class="profile-stat-label">Rating</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="profile-section">
+            <h2 class="section-title">Mi Información</h2>
+            <div class="profile-menu-card">
+              <div class="profile-menu-item">
+                <div class="profile-menu-icon blue">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                  </svg>
+                </div>
+                <div class="profile-menu-content">
+                  <h3 class="profile-menu-title">Datos Personales</h3>
+                  <p class="profile-menu-subtitle">Nombre, email, teléfono</p>
+                </div>
+                <svg class="profile-menu-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="9 18 15 12 9 6"/>
+                </svg>
+              </div>
+              <div class="profile-menu-item">
+                <div class="profile-menu-icon purple">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+                  </svg>
+                </div>
+                <div class="profile-menu-content">
+                  <h3 class="profile-menu-title">Información Laboral</h3>
+                  <p class="profile-menu-subtitle">Cargo, departamento, fecha inicio</p>
+                </div>
+                <svg class="profile-menu-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="9 18 15 12 9 6"/>
+                </svg>
+              </div>
+              <div class="profile-menu-item">
+                <div class="profile-menu-icon green">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/>
+                  </svg>
+                </div>
+                <div class="profile-menu-content">
+                  <h3 class="profile-menu-title">Datos Bancarios</h3>
+                  <p class="profile-menu-subtitle">Cuenta para nómina</p>
+                </div>
+                <svg class="profile-menu-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="9 18 15 12 9 6"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <div class="profile-section">
+            <h2 class="section-title">Configuración</h2>
+            <div class="profile-menu-card">
+              <div class="profile-menu-item">
+                <div class="profile-menu-icon orange">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                  </svg>
+                </div>
+                <div class="profile-menu-content">
+                  <h3 class="profile-menu-title">Notificaciones</h3>
+                  <p class="profile-menu-subtitle">Configura tus alertas</p>
+                </div>
+                <svg class="profile-menu-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="9 18 15 12 9 6"/>
+                </svg>
+              </div>
+              <div class="profile-menu-item">
+                <div class="profile-menu-icon blue">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                  </svg>
+                </div>
+                <div class="profile-menu-content">
+                  <h3 class="profile-menu-title">Preferencias</h3>
+                  <p class="profile-menu-subtitle">Idioma, tema, accesibilidad</p>
+                </div>
+                <svg class="profile-menu-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="9 18 15 12 9 6"/>
+                </svg>
+              </div>
+              <div class="profile-menu-item">
+                <div class="profile-menu-icon red">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>
+                  </svg>
+                </div>
+                <div class="profile-menu-content">
+                  <h3 class="profile-menu-title">Cerrar Sesión</h3>
+                  <p class="profile-menu-subtitle">Salir de la aplicación</p>
+                </div>
+                <svg class="profile-menu-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="9 18 15 12 9 6"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <p style="text-align: center; font-size: 12px; color: #94a3b8; padding: 20px;">
+            OnboardHub v1.0.0
+          </p>
+        </div>
+      </div>
+
+      <!-- Bottom Navigation -->
+      <nav class="bottom-nav">
+        <button class="nav-item active" onclick="showScreen('journey')">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+          </svg>
+          <span>Mi Viaje</span>
+        </button>
+        <button class="nav-item" onclick="showScreen('tasks')">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+          </svg>
+          <span>Tareas</span>
+        </button>
+        <button class="nav-item" onclick="showScreen('resources')">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+          </svg>
+          <span>Recursos</span>
+        </button>
+        <button class="nav-item" onclick="showScreen('profile')">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+          </svg>
+          <span>Perfil</span>
+        </button>
+      </nav>
+
+      <!-- Feedback Modal -->
+      <div class="modal-overlay" id="feedback-modal">
+        <div class="modal-sheet">
+          <div class="modal-handle"></div>
+          <h2 class="modal-title">¿Cómo fue tu experiencia?</h2>
+          <p class="modal-subtitle">Califica esta etapa</p>
+          
+          <div class="star-rating">
+            <button class="star-btn" onclick="setRating(1)">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </button>
+            <button class="star-btn" onclick="setRating(2)">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </button>
+            <button class="star-btn" onclick="setRating(3)">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </button>
+            <button class="star-btn" onclick="setRating(4)">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </button>
+            <button class="star-btn" onclick="setRating(5)">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </button>
+          </div>
+
+          <textarea class="modal-textarea" placeholder="¿Algún comentario adicional?"></textarea>
+
+          <div class="modal-actions">
+            <button class="modal-btn secondary" onclick="closeFeedbackModal()">Omitir</button>
+            <button class="modal-btn primary" onclick="closeFeedbackModal()">Enviar</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Task Detail Modal -->
+      <div class="modal-overlay" id="task-modal">
+        <div class="modal-sheet">
+          <div class="modal-handle"></div>
+          
+          <div class="task-detail-header">
+            <div class="task-detail-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/>
+              </svg>
+            </div>
+            <div>
+              <h2 class="task-detail-title">Programar reunión con jefe</h2>
+              <p class="task-detail-stage">Reunión con Jefe</p>
+            </div>
+          </div>
+
+          <div class="task-detail-info">
+            <div class="task-detail-row">
+              <span class="task-detail-label">Fecha límite</span>
+              <span class="task-detail-value urgent">Hoy, 18 Nov</span>
+            </div>
+            <div class="task-detail-row">
+              <span class="task-detail-label">Responsable</span>
+              <span class="task-detail-value">Tú</span>
+            </div>
+            <div class="task-detail-row">
+              <span class="task-detail-label">Duración estimada</span>
+              <span class="task-detail-value">30 minutos</span>
+            </div>
+          </div>
+
+          <p style="font-size: 14px; color: #64748b; line-height: 1.6; margin-bottom: 20px;">
+            Agenda una reunión de 30 minutos con tu jefe directo (Juan Pérez) para conocerse, revisar expectativas del cargo y resolver cualquier duda inicial.
+          </p>
+
+          <div class="modal-actions">
+            <button class="modal-btn secondary" onclick="closeTaskDetail()">Cerrar</button>
+            <button class="modal-btn primary" onclick="closeTaskDetail()">Completar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Screen Navigation
+    function showScreen(screenId) {
+      // Update screens
+      document.querySelectorAll('.screen').forEach(screen => {
+        screen.classList.remove('active');
+      });
+      document.getElementById('screen-' + screenId).classList.add('active');
+
+      // Update nav
+      document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.remove('active');
+      });
+      event.currentTarget.classList.add('active');
+    }
+
+    // Feedback Modal
+    function openFeedbackModal() {
+      document.getElementById('feedback-modal').classList.add('open');
+    }
+
+    function closeFeedbackModal() {
+      document.getElementById('feedback-modal').classList.remove('open');
+    }
+
+    // Task Detail Modal
+    function openTaskDetail() {
+      document.getElementById('task-modal').classList.add('open');
+    }
+
+    function closeTaskDetail() {
+      document.getElementById('task-modal').classList.remove('open');
+    }
+
+    // Star Rating
+    let currentRating = 0;
+    function setRating(rating) {
+      currentRating = rating;
+      const stars = document.querySelectorAll('.star-btn');
+      stars.forEach((star, index) => {
+        star.classList.toggle('active', index < rating);
+      });
+    }
+
+    // Close modals on overlay click
+    document.querySelectorAll('.modal-overlay').forEach(modal => {
+      modal.addEventListener('click', function(e) {
+        if (e.target === this) {
+          this.classList.remove('open');
+        }
+      });
+    });
+
+    // Task checkbox toggle
+    document.querySelectorAll('.task-checkbox').forEach(checkbox => {
+      checkbox.addEventListener('click', function(e) {
+        e.stopPropagation();
+        this.classList.toggle('checked');
+        if (this.classList.contains('checked')) {
+          this.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>';
+        } else {
+          this.innerHTML = '';
+        }
+      });
+    });
+
+    // Filter chips
+    document.querySelectorAll('.filter-chip').forEach(chip => {
+      chip.addEventListener('click', function() {
+        document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>
